@@ -470,6 +470,68 @@ LEARN_TIPS = {
     "Others": "Mixed or multi-layer plastics (like chip bags and some pouches) can't be separated into a single material, so they're almost never recyclable through standard programs — dispose of them as general waste, and look for reduce/reuse alternatives where possible.",
 }
 
+PLASTIC_INFO = {
+    "PET": {
+        "description": "PET (Polyethylene Terephthalate) is a strong, lightweight, clear synthetic material from the polyester family, widely used for food and liquid packaging. Identified by recycling number #1.",
+        "properties": [
+            "Clear and safe — food and drink approved",
+            "Tough and light — doesn't break easily",
+            "Gas barrier — keeps sodas fizzy",
+            "Recyclable — can be made into new bottles or fabric",
+        ],
+        "uses": "Water bottles, soda bottles, juice containers, peanut butter jars, salad dressing containers, polyester clothing fabric.",
+    },
+    "HDPE": {
+        "description": "HDPE (High-Density Polyethylene) is one of the most versatile and widely recycled plastics. It is strong, rigid, and resistant to chemicals and moisture. Identified by recycling number #2.",
+        "properties": [
+            "Strong and rigid — holds heavy liquids",
+            "Chemical resistant — safe for detergents and cleaners",
+            "Moisture barrier — keeps contents dry",
+            "Widely recyclable — accepted almost everywhere",
+        ],
+        "uses": "Milk jugs, detergent bottles, shampoo bottles, plastic bags, pipes, plastic lumber.",
+    },
+    "LDPE": {
+        "description": "LDPE (Low-Density Polyethylene) is a flexible, soft plastic with good chemical resistance. It is less rigid than HDPE and commonly used for films and flexible packaging. Identified by recycling number #4.",
+        "properties": [
+            "Flexible and soft — bends without breaking",
+            "Lightweight — adds minimal weight to packaging",
+            "Moisture resistant — keeps contents dry",
+            "Partially recyclable — accepted at some drop-off points",
+        ],
+        "uses": "Bread bags, squeeze bottles, shrink wrap, plastic grocery bags, food storage bags.",
+    },
+    "PP": {
+        "description": "PP (Polypropylene) is a tough, heat-resistant plastic widely used for food containers and automotive parts. It has a high melting point, making it microwave-safe. Identified by recycling number #5.",
+        "properties": [
+            "Heat resistant — safe for microwave use",
+            "Tough and fatigue resistant — hinges flex repeatedly",
+            "Chemical resistant — safe for food storage",
+            "Recyclable — increasingly accepted curbside",
+        ],
+        "uses": "Yogurt tubs, bottle caps, takeout containers, straws, car parts, reusable food containers.",
+    },
+    "PS": {
+        "description": "PS (Polystyrene) is a lightweight, rigid or foamable plastic. In foam form (Styrofoam), it is used for insulation and packaging. It is one of the hardest plastics to recycle. Identified by recycling number #6.",
+        "properties": [
+            "Lightweight — very low density, especially as foam",
+            "Insulating — keeps food hot or cold",
+            "Brittle — breaks easily when rigid",
+            "Rarely recyclable — most facilities do not accept it",
+        ],
+        "uses": "Foam cups, takeout clamshells, packing peanuts, disposable cutlery, CD cases.",
+    },
+    "Others": {
+        "description": "Code #7 covers all plastics not classified under codes 1–6, including multi-layer materials, polycarbonate (PC), and bioplastics. These are generally the hardest to recycle.",
+        "properties": [
+            "Mixed composition — often multiple resin types",
+            "Variable properties — depends on specific material",
+            "Hard to recycle — not accepted in standard programs",
+            "Includes bioplastics — some are compostable",
+        ],
+        "uses": "Multi-layer food packaging, large water cooler bottles, some sunglasses, DVDs, nylon.",
+    },
+}
 # ---------------- Groq ----------------
 @st.cache_data(show_spinner=False)
 def get_guidance(plastic_type, recyclable):
@@ -935,38 +997,37 @@ if uploaded_file is not None:
     #         </div>
     #         """, unsafe_allow_html=True)
 
-   # Detailed Prediction Card
+    # Detailed Prediction Card
     st.markdown('<div class="section-title">📊 Identified Plastic</div>', unsafe_allow_html=True)
-    
+
+    pinfo = PLASTIC_INFO.get(top1_cls, PLASTIC_INFO["Others"])
+
     with st.container(border=True):
-        # Header row
         h1, h2 = st.columns([1, 4])
         with h1:
-            st.markdown(f'<div style="font-size:3rem; color:{color}; text-align:center">{symbol}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div style="font-family:Baloo 2,sans-serif; font-size:2rem; font-weight:800; color:{color}; text-align:center">#{info["code"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size:3rem;color:{color};text-align:center">{symbol}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size:2rem;font-weight:800;color:{color};text-align:center">#{info["code"]}</div>', unsafe_allow_html=True)
         with h2:
-            st.markdown(f'<div style="font-size:1.4rem; font-weight:700; margin-top:0.5rem">{top1_cls}</div>', unsafe_allow_html=True)
-            st.markdown(f'<div style="font-size:0.82rem; color:gray">{info["name_en"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size:1.4rem;font-weight:700">{top1_cls}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size:0.82rem;color:gray;margin-bottom:0.5rem">{info["name_en"]}</div>', unsafe_allow_html=True)
             if info["recyclable"]:
-                st.success("✓ Recyclable", icon="♻️")
+                st.success("✓ Recyclable")
             else:
                 st.error("✗ Non-recyclable")
+            st.progress(top1_conf, text=f"Confidence: {conf_pct}%")
 
         st.divider()
 
-        # Confidence
-        st.markdown("**Confidence Level**")
-        st.progress(top1_conf, text=f"{conf_pct}%")
+        st.markdown(f"_{pinfo['description']}_")
 
-        # Examples
-        st.markdown(f"**📦 Common items:** {info['examples']}")
+        st.markdown("**🔑 Key Properties**")
+        for prop in pinfo["properties"]:
+            st.markdown(f"• {prop}")
 
         st.divider()
 
-        # Tips
-        st.markdown("**💡 Recycling Tips**")
-        tip = LEARN_TIPS.get(top1_cls, "")
-        st.info(tip)
+        st.markdown("**📦 Common Uses**")
+        st.markdown(pinfo["uses"])
     # Guidance
     st.markdown('<div class="section-title">♻️ Recycling Guidance</div>', unsafe_allow_html=True)
     with st.spinner("Getting guidance..."):
