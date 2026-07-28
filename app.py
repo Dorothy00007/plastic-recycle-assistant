@@ -808,12 +808,9 @@ def render_learn_page():
                 <div style="font-size:2.5rem; color:{color}">{sym}</div>
                 {badge}
             </div>
-            <div class="examples-text">📦 Common items: {info['examples']}</div>
-            <div class="guidance-box" style="margin-top:0.8rem; padding:0.8rem 1.2rem; font-size:0.85rem;">
-                    💡 {LEARN_TIPS.get(top1_cls, "")}
-            </div>
-      
-        """, unsafe_allow_html=True)
+            <div class="examples-text">📦 <b>Common items:</b> {info['examples']}</div>
+            <div class="guidance-box">💡 {LEARN_TIPS.get(cls, "")}</div>
+            """, unsafe_allow_html=True)
 
     st.markdown('<div class="section-title">🌱 General Tips</div>', unsafe_allow_html=True)
     st.markdown("""
@@ -978,6 +975,9 @@ if uploaded_file is not None:
                 <div style="font-weight:800; color:{color}; min-width:48px; font-size:1rem">{conf_pct}%</div>
             </div>
             <div class="examples-text">📦 Common items: {info['examples']}</div>
+            <div class="guidance-box" style="margin-top:0.8rem; padding:0.8rem 1.2rem; font-size:0.85rem;">
+                💡 {LEARN_TIPS.get(top1_cls, "")}
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
