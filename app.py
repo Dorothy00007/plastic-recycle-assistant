@@ -417,12 +417,12 @@ def apply_theme(dark):
         margin: 1rem auto;
         overflow-y: auto;
     }}
-    .result-card.result-card-flex {{
-        width: 100%;
-        height: auto;
-        max-width: none;
-        margin: 1rem 0;
-        overflow-y: visible;
+   .result-card.result-card-flex {{
+        width: 100% !important;
+        height: auto !important;
+        max-width: none !important;
+        margin: 1rem 0 !important;
+        overflow-y: visible !important;
     }}
     </style>
     """, unsafe_allow_html=True)
