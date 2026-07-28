@@ -911,24 +911,24 @@ if uploaded_file is not None:
         </div>
         """, unsafe_allow_html=True)
 
-    # # Top 3 Predictions
-    # st.markdown('<div class="section-title">📊 Top Predictions</div>', unsafe_allow_html=True)
-    # top5_indices = probs.top5
-    # top5_confs = probs.top5conf.tolist()
-    # pred_cols = st.columns(3)
-    # for i, (idx, conf) in enumerate(zip(top5_indices[:3], top5_confs[:3])):
-    #     cls_name = model.names[idx]
-    #     c = COLORS.get(cls_name, "#5C8374")
-    #     pct = int(float(conf) * 100)
-    #     sym = RESIN_SYMBOLS.get(cls_name, "♹")
-    #     with pred_cols[i]:
-    #         st.markdown(f"""
-    #         <div class="pred-card" style="border-top: 4px solid {c};">
-    #             <div style="font-size:1.8rem; color:{c}">{sym}</div>
-    #             <div class="pred-cls">{cls_name}</div>
-    #             <div class="pred-pct" style="color:{c}">{pct}%</div>
-    #         </div>
-    #         """, unsafe_allow_html=True)
+    # Top 3 Predictions
+    st.markdown('<div class="section-title">📊 Top Predictions</div>', unsafe_allow_html=True)
+    top5_indices = probs.top5
+    top5_confs = probs.top5conf.tolist()
+    pred_cols = st.columns(3)
+    for i, (idx, conf) in enumerate(zip(top5_indices[:3], top5_confs[:3])):
+        cls_name = model.names[idx]
+        c = COLORS.get(cls_name, "#5C8374")
+        pct = int(float(conf) * 100)
+        sym = RESIN_SYMBOLS.get(cls_name, "♹")
+        with pred_cols[i]:
+            st.markdown(f"""
+            <div class="pred-card" style="border-top: 4px solid {c};">
+                <div style="font-size:1.8rem; color:{c}">{sym}</div>
+                <div class="pred-cls">{cls_name}</div>
+                <div class="pred-pct" style="color:{c}">{pct}%</div>
+            </div>
+            """, unsafe_allow_html=True)
 
     # Guidance
     st.markdown('<div class="section-title">♻️ Recycling Guidance</div>', unsafe_allow_html=True)
