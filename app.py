@@ -1007,9 +1007,9 @@ if uploaded_file is not None:
 
     with st.container(border=True):
         h1, h2 = st.columns([1, 4])
-        # with h1:
-        #     st.markdown(f'<div style="font-size:3rem;color:{color};text-align:center">{symbol}</div>', unsafe_allow_html=True)
-        #     st.markdown(f'<div style="font-size:2rem;font-weight:800;color:{color};text-align:center">#{info["code"]}</div>', unsafe_allow_html=True)
+        with h1:
+             st.markdown(f'<div style="font-size:3rem;color:{color};text-align:center">{symbol}</div>', unsafe_allow_html=True)
+             st.markdown(f'<div style="font-size:2rem;font-weight:800;color:{color};text-align:center">#{info["code"]}</div>', unsafe_allow_html=True)
         # with h2:
         #     st.markdown(f'<div style="font-size:1.4rem;font-weight:700">{top1_cls}</div>', unsafe_allow_html=True)
         #     st.markdown(f'<div style="font-size:0.82rem;color:gray;margin-bottom:0.5rem">{info["name_en"]}</div>', unsafe_allow_html=True)
