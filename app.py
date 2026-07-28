@@ -410,6 +410,11 @@ def apply_theme(dark):
         display: block;
     }}
     .result-card {{
+        max-width: 100%;
+        box-sizing: border-box;
+        margin: 1rem auto;
+    }}
+    .result-card-fixed {{
         width: 480px;
         height: 480px;
         max-width: 100%;
