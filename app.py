@@ -932,41 +932,24 @@ if uploaded_file is not None:
 
     # Detailed Prediction Card
     st.markdown('<div class="section-title">📊 Identified Plastic</div>', unsafe_allow_html=True)
+    
     tip = LEARN_TIPS.get(top1_cls, "")
-    st.markdown(f"""
-    <div class="result-card result-card-flex">
-        <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; margin-bottom:1.2rem;">
-            <div style="font-size:3rem; color:{color}">{symbol}</div>
-            <div>
-                <div style="font-family:'Baloo 2',sans-serif; font-size:2.5rem; font-weight:800; color:{color}; line-height:1">#{info['code']}</div>
-                <div class="plastic-name">{top1_cls}</div>
-                <div class="plastic-fullname">{info['name_en']}</div>
-            </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-            <div>
-                <div class="conf-label">Recyclability</div>
-                {badge}
-            </div>
-            <div>
-                <div class="conf-label">Confidence</div>
-                <div style="display:flex; align-items:center; gap:0.8rem; margin-top:0.4rem;">
-                    <div class="conf-bar-bg" style="flex:1">
-                        <div style="height:10px; width:{conf_pct}%; background:linear-gradient(90deg,{color},{color}99); border-radius:8px;"></div>
-                    </div>
-                    <div style="font-weight:800; color:{color}; font-size:0.95rem">{conf_pct}%</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="conf-label">Common Items</div>
-        <div class="examples-text" style="margin-bottom:1rem; font-size:0.88rem;">📦 {info['examples']}</div>
-
-        <div class="conf-label">Recycling Tips</div>
-        <div class="guidance-box" style="margin-top:0.4rem;">💡 {tip}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown(f"**Recyclability**")
+        if info["recyclable"]:
+            st.success("✓ Recyclable")
+        else:
+            st.error("✗ Non-recyclable")
+    with c2:
+        st.markdown(f"**Confidence:** {conf_pct}%")
+        st.progress(top1_conf)
+    
+    st.markdown(f"**📦 Common items:** {info['examples']}")
+    st.markdown("---")
+    st.markdown(f"**💡 Recycling Tips**")
+    st.info(tip)
 
     # Guidance
     st.markdown('<div class="section-title">♻️ Recycling Guidance</div>', unsafe_allow_html=True)
