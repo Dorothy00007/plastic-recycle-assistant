@@ -935,27 +935,38 @@ if uploaded_file is not None:
     #         </div>
     #         """, unsafe_allow_html=True)
 
-    # Detailed Prediction Card
+   # Detailed Prediction Card
     st.markdown('<div class="section-title">📊 Identified Plastic</div>', unsafe_allow_html=True)
     
-    tip = LEARN_TIPS.get(top1_cls, "")
-    
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown(f"**Recyclability**")
-        if info["recyclable"]:
-            st.success("✓ Recyclable")
-        else:
-            st.error("✗ Non-recyclable")
-    with c2:
-        st.markdown(f"**Confidence:** {conf_pct}%")
-        st.progress(top1_conf)
-    
-    st.markdown(f"**📦 Common items:** {info['examples']}")
-    st.markdown("---")
-    st.markdown(f"**💡 Recycling Tips**")
-    st.info(tip)
+    with st.container(border=True):
+        # Header row
+        h1, h2 = st.columns([1, 4])
+        with h1:
+            st.markdown(f'<div style="font-size:3rem; color:{color}; text-align:center">{symbol}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-family:Baloo 2,sans-serif; font-size:2rem; font-weight:800; color:{color}; text-align:center">#{info["code"]}</div>', unsafe_allow_html=True)
+        with h2:
+            st.markdown(f'<div style="font-size:1.4rem; font-weight:700; margin-top:0.5rem">{top1_cls}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-size:0.82rem; color:gray">{info["name_en"]}</div>', unsafe_allow_html=True)
+            if info["recyclable"]:
+                st.success("✓ Recyclable", icon="♻️")
+            else:
+                st.error("✗ Non-recyclable")
 
+        st.divider()
+
+        # Confidence
+        st.markdown("**Confidence Level**")
+        st.progress(top1_conf, text=f"{conf_pct}%")
+
+        # Examples
+        st.markdown(f"**📦 Common items:** {info['examples']}")
+
+        st.divider()
+
+        # Tips
+        st.markdown("**💡 Recycling Tips**")
+        tip = LEARN_TIPS.get(top1_cls, "")
+        st.info(tip)
     # Guidance
     st.markdown('<div class="section-title">♻️ Recycling Guidance</div>', unsafe_allow_html=True)
     with st.spinner("Getting guidance..."):
